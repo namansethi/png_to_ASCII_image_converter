@@ -18,7 +18,7 @@ public class Controller {
 
     public void initialize(){
         button.setOnMouseClicked(event->{
-        
+
         });
     }
 
