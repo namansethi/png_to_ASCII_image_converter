@@ -7,8 +7,12 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class Controller {
 
@@ -33,14 +37,41 @@ public class Controller {
             FileChooser fileChooser = new FileChooser();
             setFileExtension(dataChoiceBox, fileChooser);
             File file = fileChooser.showOpenDialog(((Node) actionEvent.getTarget()).getScene().getWindow());
-
+            CengC cengC = new CengC();
             String dataSelectionValue = dataChoiceBox.getValue();
-            if (dataSelectionValue.equalsIgnoreCase(PNG_SELECTOR_LABEL)) {
+            BufferedImage im;
 
+             if (dataSelectionValue.equalsIgnoreCase(PNG_SELECTOR_LABEL)) {
+                //Parse the shit into ASCII.
+
+                try {
+                    im = ImageIO.read(file);
+                    cengC.toGrayScale(im);
+
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+                ProcessBuilder pb = new ProcessBuilder("Notepad++.exe", "ASCIItrial.txt");
+                try {
+                    pb.start();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
             } else if (dataSelectionValue.equalsIgnoreCase(TEXT_SELECTOR_LABEL)) {
-
-
+                try {
+                   BufferedImage bufferedImage =  cengC.ASCIItoPNG(file);
+                    JFrame test = new JFrame();
+                    ImageIcon ico = new ImageIcon(bufferedImage);
+                    JLabel lb = new JLabel(ico);
+                    test.add(lb);
+                    test.setSize(720, 720);
+                    test.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
